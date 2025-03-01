@@ -1,0 +1,44 @@
+{
+  "name": "@amj7/nativescript-vue-portal",
+  "description": "TODO NativeScript Vue3",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "prepack": "unbuild"
+  },
+  "peerDependencies": {
+    "nativescript-vue": "3.0.0-rc.3"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.2",
+    "unbuild": "^2.0.0",
+    "nativescript-vue": "3.0.0-rc.3"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "component",
+    "library",
+    "portal",
+    "nativescript"
+  ],
+  "license": "MIT",
+  "author": "ArthurMJ96",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArthurMJ96/lucide-patch-nativescript-vue.git"
+  }
+}
