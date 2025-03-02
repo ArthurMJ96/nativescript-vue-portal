@@ -1,6 +1,11 @@
-import { defineBuildConfig } from "unbuild";
+import { defineBuildConfig } from 'unbuild'
 
 export default defineBuildConfig({
-  entries: ["./src/"],
+  entries: ['./src/'],
   declaration: true,
-});
+  rollup: {
+    esbuild: {
+      minify: true,
+    },
+  },
+})
