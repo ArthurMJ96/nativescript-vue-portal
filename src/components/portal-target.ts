@@ -16,8 +16,30 @@ export default defineComponent({
   compatConfig: { MODE: 3 },
   name: 'portalTarget',
   props: {
+    /**
+     * Wether to wrap teleported content in a layout element. (Default: false)
+     * Fixes RootLayout freezing.
+     */
+    wrap: { type: Boolean, default: false },
+    
+    /**
+     * Layout element to wrap all teleported content with. No effect when wrap=false. (Default: GridLayout)
+     */
+    as: { type: String, default: 'GridLayout' },
+
+    /**
+     * Allows rendering content from multiple Portal components at the same time.
+     */
     multiple: { type: Boolean, default: false },
+
+    /**
+     * Name of this portal target.
+     */
     name: { type: String, required: true },
+
+    /**
+     * Props to be provided to teleported content.
+     */
     slotProps: { type: Object, default: () => ({}) },
   },
   emits: ['change'],
@@ -31,16 +53,20 @@ export default defineComponent({
           props.multiple
         )
         const wrapperSlot = slots.wrapper
-        const rawNodes = transports.map((t) => t.content(props.slotProps))
+        const rawNodes = transports.map((t) =>
+          t.content(props.slotProps).map((n, i) => {
+            // Force teleported item root content to have keys. Fixes multiple feature for Nativescript-Vue.
+            if (!n.key) n.key = `_portal_item-${String(t.from)}-${i}`
+            return n
+          })
+        )
         const vnodes = wrapperSlot
           ? rawNodes.flatMap((nodes) =>
               nodes.length ? wrapperSlot(nodes) : []
             )
           : rawNodes.flat(1)
-        return {
-          vnodes,
-          vnodesFn: () => vnodes, // just to make Vue happy. raw vnodes in a slot give a DEV warning
-        }
+
+        return { vnodes, vnodesFn: () => vnodes }
       }
     )
 
@@ -57,18 +83,10 @@ export default defineComponent({
     return () => {
       const hasContent = !!slotVnodes.value.vnodes.length
       if (hasContent) {
-        return [
-          // this node is a necessary hack to force Vue to change the scoped-styles boundary
-          // TODO:  find less hacky solution
-          h('div', {
-            style: 'display: none',
-            key: '__portal-vue-hacky-scoped-slot-repair__',
-          }),
-          // we wrap the slot content in a functional component
-          // so that transitions in the slot can properly determine first render
-          // for `appear` behavior to work properly
-          h(PortalTargetContent, slotVnodes.value.vnodesFn),
-        ]
+        if (props.wrap && props.as) {
+          return h(props.as, h(PortalTargetContent, slotVnodes.value.vnodesFn))
+        }
+        return h(PortalTargetContent, slotVnodes.value.vnodesFn)
       } else {
         return slots.default?.()
       }
