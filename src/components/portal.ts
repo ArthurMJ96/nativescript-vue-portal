@@ -5,6 +5,7 @@ import {
   onMounted,
   onUpdated,
   watch,
+  useId,
 } from 'nativescript-vue'
 import { useWormhole } from '../composables/wormhole'
 import type { Name, PortalProps } from '../types'
@@ -33,6 +34,7 @@ export function usePortal(props: PortalProps, slots: Slots) {
       from: props.name,
     })
   }
+
   onMounted(() => {
     if (!props.disabled) {
       sendUpdate()
@@ -68,7 +70,7 @@ export default defineComponent({
   name: 'portal',
   props: {
     disabled: { type: Boolean },
-    name: { type: [String, Symbol], default: () => Symbol() },
+    name: { type: [String, Symbol], default: () => useId() },
     order: { type: Number },
     slotProps: { type: Object, default: () => ({}) },
     to: {
