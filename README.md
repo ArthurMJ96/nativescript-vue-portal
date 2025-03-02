@@ -2,6 +2,8 @@
 
 A Portal Component for NativeScript Vue 3, to render elements outside of a component, anywhere in your app.
 
+[Basic StackBlitz Example](https://stackblitz.com/edit/portalvue-for-nativescript-vue-3-example?file=src%2Fcomponents%2FHome.vue)
+
 ## Installation
 
 ```bash
