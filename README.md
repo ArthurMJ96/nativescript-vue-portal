@@ -1,36 +1,43 @@
 # PortalVue for NativeScript Vue 3
 
-A Portal Component for NativeScript Vue 3, to render elements outside of a component, anywhere in your app.
+A Portal Component for [NativeScript Vue 3](https://github.com/nativescript-vue/nativescript-vue), to render elements outside of a component, anywhere in your app.
 
 [Basic StackBlitz Example](https://stackblitz.com/edit/portalvue-for-nativescript-vue-3-example?file=src%2Fcomponents%2FHome.vue)
 
-## Installation
+## Getting Started
 
-```bash
-npm i @amj7/nativescript-vue-portal
-```
+1.  **Install the package:**
 
-```javascript
-import PortalVue from '@amj7/nativescript-vue-portal'
+    ```bash
+    npm i @amj7/nativescript-vue-portal
+    ```
 
-const app = createApp(Home)
+2.  **Register the plugin in your `main.ts` (or equivalent):**
 
-PortalVue(app)
+    ```javascript
+    import { createApp } from 'vue'
+    import Home from './components/Home.vue'
+    import PortalVue from '@amj7/nativescript-vue-portal'
 
-app.start()
-```
+    const app = createApp(Home)
+    PortalVue(app)
+    app.start()
+    ```
 
-## Usage
+    _This registers the necessary components and registers and [App-level Provide](https://vuejs.org/guide/components/provide-inject.html#app-level-provide) for managing portal connections throughout your application._
 
-### Basic:
+3.  **Use the `Portal` and `PortalTarget` components in your App:**
 
-```html
-<Portal to="destination">
-  <label text="Portal Test" class="bg-red-400" />
-</Portal>
+    ```vue
+    <template>
+      <Portal to="myDestination">
+        <label text="Hello from the Portal!" />
+      </Portal>
+      <PortalTarget name="myDestination" />
+    </template>
+    ```
 
-<PortalTarget name="destination" />
-```
+## Special Considerations
 
 ### RootLayout:
 
@@ -52,9 +59,25 @@ The RootLayout will break vue events if we teleport **multiple** items in-and-ou
 
 To change the default wrap element, use the `as`-prop. (`as="StackLayout"`)
 
+### Use without installing globally:
+
+You can import the components directly. The first created instance of `Portal` or `PortalTarget` will try to register the required [App-level Provide](https://vuejs.org/guide/components/provide-inject.html#app-level-provide).
+
+```vue
+<script setup lang="ts">
+import { PortalTarget } from '@amj7/nativescript-vue-portal'
+</script>
+
+<template>
+  <PortalTarget name="destination" />
+</template>
+```
+
 ## API
 
 ### `<Portal>`
+
+#### Props:
 
 - **`to` (String):** The name of the `PortalTarget` where the content should be rendered.
 - **`name` (String | Symbol, default: Unique ID):** A unique identifier for the portal. Defaults to a generated unique ID.
@@ -64,11 +87,17 @@ To change the default wrap element, use the `as`-prop. (`as="StackLayout"`)
 
 ### `<PortalTarget>`
 
+#### Props:
+
 - **`name` (String, required):** The unique name that matches the `to` prop of a `Portal`.
 - **`wrap` (Boolean, optional, default: `false`):** If `true`, wraps the rendered content in a layout element (specified by the `as` prop). Required when teleporting multiple items to a `RootLayout` to avoid event issues.
 - **`as` (String, optional, default: `GridLayout`):** The NativeScript layout element to use as the wrapper when `wrap` is `true`.
 - **`multiple` (Boolean, optional, default: `false`):** If `true`, allows multiple `Portal` components to render content to this `PortalTarget`.
 - **`slotProps` (Object, default: `{}`):** Props that are passed to the slot content of the PortalTarget.
+
+#### Emits:
+
+- **`change` (returns `{ hasContent: boolean, sources: Name[] }`):** Fires after items have been teleported in or out.
 
 ---
 
