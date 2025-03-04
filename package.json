@@ -1,7 +1,7 @@
 {
   "name": "@amj7/nativescript-vue-portal",
   "description": "Teleport Component adapted to work in NativeScript Vue3",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "exports": {
     ".": {
