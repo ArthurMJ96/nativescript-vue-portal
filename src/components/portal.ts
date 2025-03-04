@@ -7,12 +7,12 @@ import {
   watch,
   useId,
 } from 'nativescript-vue'
-import { useWormhole } from '../composables/wormhole'
+import { useEnsuredWormhole } from '../composables/wormhole'
 import type { Name, PortalProps } from '../types'
 import { assertStaticProps } from '../utils'
 
 export function usePortal(props: PortalProps, slots: Slots) {
-  const wormhole = useWormhole()
+  const wormhole = useEnsuredWormhole()
 
   function sendUpdate() {
     const { to, name: from, order } = props

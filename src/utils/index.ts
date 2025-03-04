@@ -1,7 +1,7 @@
 import { watch } from 'nativescript-vue'
 
 export function warn(msg: string) {
-  console.log('[portal-vue]: ' + msg)
+  console.warn('[nativescript-vue-portal]: ' + msg)
 }
 
 export function assertStaticProps(

@@ -6,7 +6,7 @@ import {
   h,
   watch,
 } from 'nativescript-vue'
-import { useWormhole } from '../composables/wormhole'
+import { useEnsuredWormhole } from '../composables/wormhole'
 
 const PortalTargetContent: FunctionalComponent = (_, { slots }) => {
   return slots.default?.()
@@ -44,7 +44,7 @@ export default defineComponent({
   },
   emits: ['change'],
   setup(props, { emit, slots }) {
-    const wormhole = useWormhole()
+    const wormhole = useEnsuredWormhole()
 
     const slotVnodes = computed<{ vnodes: VNode[]; vnodesFn: () => VNode[] }>(
       () => {

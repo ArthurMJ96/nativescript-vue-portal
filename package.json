@@ -1,7 +1,7 @@
 {
   "name": "@amj7/nativescript-vue-portal",
   "description": "Teleport Component adapted to work in NativeScript Vue3",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "exports": {
     ".": {
@@ -20,7 +20,7 @@
     "prepack": "unbuild"
   },
   "peerDependencies": {
-    "nativescript-vue": "3.0.0-rc.3"
+    "nativescript-vue": ">=3.0.0-rc.3"
   },
   "devDependencies": {
     "typescript": "~5.7.2",
@@ -32,6 +32,7 @@
     "vue3",
     "component",
     "portal",
+    "teleport",
     "nativescript"
   ],
   "license": "MIT",

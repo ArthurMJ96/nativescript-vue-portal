@@ -4,6 +4,7 @@ import PortalTarget from './components/portal-target'
 import {
   provideWormhole,
   useWormhole,
+  useEnsuredWormhole,
   wormholeSymbol,
 } from './composables/wormhole'
 import type { Wormhole as TWormhole } from './types'
@@ -33,7 +34,9 @@ export {
   Portal,
   PortalTarget,
   useWormhole,
+  useEnsuredWormhole,
   provideWormhole,
+  wormholeSymbol,
   TWormhole,
   createWormhole,
 }
