@@ -15,15 +15,17 @@ const PortalTargetContent: FunctionalComponent = (_, { slots }) => {
 export default defineComponent({
   compatConfig: { MODE: 3 },
   name: 'portalTarget',
+  inheritAttrs: false,
   props: {
     /**
      * Wether to wrap teleported content in a layout element. (Default: false)
      * Fixes RootLayout freezing.
      */
     wrap: { type: Boolean, default: false },
-    
+
     /**
-     * Layout element to wrap all teleported content with. No effect when wrap=false. (Default: GridLayout)
+     * Layout element to wrap all teleported content with. (Default: GridLayout)
+     * No effect when wrap=false.
      */
     as: { type: String, default: 'GridLayout' },
 
@@ -43,7 +45,7 @@ export default defineComponent({
     slotProps: { type: Object, default: () => ({}) },
   },
   emits: ['change'],
-  setup(props, { emit, slots }) {
+  setup(props, { emit, slots, attrs }) {
     const wormhole = useEnsuredWormhole()
 
     const slotVnodes = computed<{ vnodes: VNode[]; vnodesFn: () => VNode[] }>(
@@ -84,7 +86,11 @@ export default defineComponent({
       const hasContent = !!slotVnodes.value.vnodes.length
       if (hasContent) {
         if (props.wrap && props.as) {
-          return h(props.as, h(PortalTargetContent, slotVnodes.value.vnodesFn))
+          return h(
+            props.as,
+            { ...attrs },
+            h(PortalTargetContent, slotVnodes.value.vnodesFn)
+          )
         }
         return h(PortalTargetContent, slotVnodes.value.vnodesFn)
       } else {
