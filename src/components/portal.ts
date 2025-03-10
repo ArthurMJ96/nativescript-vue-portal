@@ -6,22 +6,40 @@ import {
   onUpdated,
   watch,
   useId,
+  getCurrentInstance,
+  ComponentInternalInstance,
 } from 'nativescript-vue'
 import { useEnsuredWormhole } from '../composables/wormhole'
-import type { Name, PortalProps } from '../types'
+import type { Name, PortalProps, Provides } from '../types'
 import { assertStaticProps } from '../utils'
 
 export function usePortal(props: PortalProps, slots: Slots) {
   const wormhole = useEnsuredWormhole()
+  const currentInstance = getCurrentInstance() as ComponentInternalInstance & {
+    provides: Provides
+    parent: (ComponentInternalInstance | null) & {
+      provides: Provides
+    }
+  }
 
   function sendUpdate() {
     const { to, name: from, order } = props
     if (slots.default) {
+      let provides
+      if (currentInstance) {
+        provides = currentInstance.provides
+
+        const parentProvides = currentInstance?.parent?.provides
+        if (parentProvides === provides) {
+          provides = currentInstance.provides = Object.create(parentProvides)
+        }
+      }
       wormhole.open({
         to,
         from: from!,
         order,
         content: slots.default,
+        provides,
       })
     } else {
       clear()

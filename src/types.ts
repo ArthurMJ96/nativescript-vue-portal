@@ -2,6 +2,8 @@ import type { Slot } from 'nativescript-vue'
 
 export type Name = string | symbol
 
+export type Provides = Record<string | symbol, unknown>
+
 export interface StringBoolMap {
   [key: string]: boolean
 }
@@ -10,6 +12,7 @@ export interface TransportInput {
   from: Name
   order?: number
   content: Slot
+  provides?: Provides
 }
 
 export type TransportsHub = Map<Name, TransportsByTarget>
@@ -21,6 +24,7 @@ export interface Transport {
   from: Name
   order: number
   content: Slot
+  provides: Provides
 }
 
 export interface TransportCloser {

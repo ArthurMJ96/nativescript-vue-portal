@@ -13,7 +13,7 @@ export function createWormhole(asReadonly = true): Wormhole {
   const transports: TransportsHub = reactive(new Map())
 
   function open(transport: TransportInput) {
-    const { to, from, content, order = Infinity } = transport
+    const { to, from, content, order = Infinity, provides } = transport
     if (!to || !from || !content) return
 
     if (!transports.has(to)) {
@@ -26,6 +26,7 @@ export function createWormhole(asReadonly = true): Wormhole {
       from,
       content,
       order,
+      provides
     } as Transport
 
     transportsForTarget.set(from, newTransport)
