@@ -9,6 +9,11 @@ import {
 } from 'nativescript-vue'
 import { useEnsuredWormhole } from '../composables/wormhole'
 
+const PortalTargetContent: FunctionalComponent = (_, { slots }) => {
+  return slots.default?.()
+}
+
+// In-between component to inject original provides
 const PortalTargetNodeRenderer = defineComponent({
   props: { provides: { type: Object } },
   setup(props, { slots }) {
@@ -21,10 +26,6 @@ const PortalTargetNodeRenderer = defineComponent({
     return () => slots.default?.()
   },
 })
-
-const PortalTargetContent: FunctionalComponent = (_, { slots }) => {
-  return slots.default?.()
-}
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -70,13 +71,12 @@ export default defineComponent({
         )
 
         const wrapperSlot = slots.wrapper
-        const rawNodes = transports.map((t) =>
-          t.content(props.slotProps).map((n, i) => {
-            // Force teleported item root content to have keys. Fixes multiple feature for Nativescript-Vue.
-            if (!n.key) n.key = `_portal_item-${String(t.from)}-${i}`
-            return h(PortalTargetNodeRenderer, { provides: t.provides }, () => [
-              n,
-            ])
+        const rawNodes = transports.map(({ content, from, provides }) =>
+          content(props.slotProps).map((n) => {
+            // Force teleported item content to have keys. Fixes multiple feature for Nativescript-Vue.
+            const key = `_portal_item-${String(from)}`
+            if (!n.key || n.key === '_default') n.key = `${key}-child`
+            return h(PortalTargetNodeRenderer, { provides, key }, () => [n])
           })
         )
         const vnodes = wrapperSlot
