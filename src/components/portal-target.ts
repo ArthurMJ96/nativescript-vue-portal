@@ -71,14 +71,15 @@ export default defineComponent({
         )
 
         const wrapperSlot = slots.wrapper
-        const rawNodes = transports.map(({ content, from, provides }) =>
-          content(props.slotProps).map((n) => {
-            // Force teleported item content to have keys. Fixes multiple feature for Nativescript-Vue.
-            const key = `_portal_item-${String(from)}`
-            if (!n.key || n.key === '_default') n.key = `${key}-child`
-            return h(PortalTargetNodeRenderer, { provides, key }, () => [n])
-          })
-        )
+        const rawNodes = transports.map(({ content, from, provides }) => {
+          return [
+            h(
+              PortalTargetNodeRenderer,
+              { provides, key: `_portal_item-${String(from)}` }, // Force teleported items to have keys. Fixes multiple features for Nativescript-Vue.
+              () => content(props.slotProps)
+            ),
+          ]
+        })
         const vnodes = wrapperSlot
           ? rawNodes.flatMap((nodes) =>
               nodes.length ? wrapperSlot(nodes) : []
