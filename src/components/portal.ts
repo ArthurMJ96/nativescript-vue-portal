@@ -3,7 +3,6 @@ import {
   defineComponent,
   onBeforeUnmount,
   onMounted,
-  onUpdated,
   watch,
   useId,
   getCurrentInstance,
@@ -55,14 +54,6 @@ export function usePortal(props: PortalProps, slots: Slots) {
 
   onMounted(() => {
     if (!props.disabled) {
-      sendUpdate()
-    }
-  })
-
-  onUpdated(() => {
-    if (props.disabled) {
-      clear()
-    } else {
       sendUpdate()
     }
   })
